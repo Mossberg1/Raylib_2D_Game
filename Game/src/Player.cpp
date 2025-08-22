@@ -65,7 +65,6 @@ void Player::draw()
 	if (!m_movingRight) 
 	{
 		drawRect.width = -m_frameWidth;
-		//drawRect.x += m_frameWidth;
 	}
 
 	DrawTextureRec(texture, drawRect, position, WHITE);
