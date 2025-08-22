@@ -35,7 +35,7 @@ private:
     int m_frameWidth;
     int m_frameHeight;
     int m_numIdleFrames = 4;
-	int m_numRunningFrames = 16; // Är igentligen 16 eftersom det är 2 rader med animation, kommer implementera det senare.
+	int m_numRunningFrames = 16;
     int m_currentFrame = 0;
     int m_animationSpeed = 8;
     AnimationState m_currentState;
