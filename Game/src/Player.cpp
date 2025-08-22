@@ -4,7 +4,7 @@
 #include "Player.h"
 
 
-constexpr char* KNIGHT_ASSET = R"(C:\Users\willi\source\repos\RaylibEngine\raylibCmakeSetup\resources\assets\sprites\knight.png)";
+constexpr char* KNIGHT_ASSET = R"(C:\Users\willi\source\repos\Raylib_2D_Game\Game\resources\assets\sprites\knight.png)";
 constexpr int DEFAULT_MOVEMENT_SPEED = 200;
 
 
