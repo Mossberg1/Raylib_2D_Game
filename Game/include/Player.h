@@ -23,10 +23,13 @@ public:
     bool onGround = true;
 
     Player(Vector2 startPos);
+
     ~Player();
 
     void despawn();
     void draw();
+	int getFrameHeight() const { return m_frameHeight; }
+	int getFrameWidth() const { return m_frameWidth; }
     void jump();
     void moveRight(float deltaTime);
     void moveLeft(float deltaTime);

@@ -1,9 +1,11 @@
 #include <iostream>
 #include <string>
+#include <vector>
 
 #include "config.h"
 #include "raylib.h"
 #include "Player.h"
+#include "Block.h"
 
 constexpr char* GAME_NAME = "MyGame";
 constexpr float MASTER_VOLUME = 0.3f;
@@ -38,18 +40,70 @@ int main(void)
 		SetTargetFPS(TARGET_FPS);
 	}
 
-	Player* player = new Player({400, GROUND_Y});
+	Block* block = new Block(BlockType::DIRT, { 0, GROUND_Y + 50 });
+	int blockWidth = block->getFrameWidth();
+	int blockHeight = block->getFrameHeight();
+	delete block;
+
+	Player* player = new Player({ 400, GROUND_Y });
 	player->spawn();
 
+	std::vector<Block*> grassBlocks = {};
+	for (size_t i = 0; i < 50; i++)
+	{
+		int xPos = i * blockWidth;
+		int yPos = (GROUND_Y + player->getFrameHeight()) - 5;
+		Vector2 position = { xPos, yPos };
+		Block* gb = new Block(BlockType::GRASS, position);
+		grassBlocks.push_back(gb);
+	}
+
+	std::vector<Block*> dirtBlocks = {};
+	for (size_t i = 0; i < 200; i++)
+	{
+		int xPos = i * blockWidth;
+		int yPos = GROUND_Y + (blockHeight * 3) - 5;
+
+		if (i >= 50 && i < 100) 
+		{
+			xPos = (i - 50) * blockWidth;
+			yPos += blockHeight;
+		}
+		else if (i >= 100 && i < 150) 
+		{
+			xPos = (i - 100) * blockWidth;
+			yPos += blockHeight * 2;
+		}
+		else if (i >= 150) 
+		{
+			xPos = (i - 150) * blockWidth;
+			yPos += blockHeight * 3;
+		}
+
+		Vector2 position = { xPos, yPos };
+		Block* db = new Block(BlockType::DIRT, position);
+		dirtBlocks.push_back(db);
+	}
+
 	// Game loop
-	while (!WindowShouldClose()) 
+	while (!WindowShouldClose())
 	{
 		BeginDrawing();
-		ClearBackground(RAYWHITE);
+		ClearBackground(DARKBLUE);
 		UpdateMusicStream(soundtrack);
 
+		for (Block* grassBlock : grassBlocks)
+		{
+			grassBlock->draw();
+		}
+
+		for (Block* dirtBlock : dirtBlocks) 
+		{
+			dirtBlock->draw();
+		}
+
 		player->draw();
-		
+
 		if (SHOW_FPS)
 		{
 			int currentFps = GetFPS();
@@ -59,28 +113,38 @@ int main(void)
 		float deltaTime = GetFrameTime();
 		bool hasMoved = false;
 
-		if (IsKeyDown(KEY_RIGHT)) 
+		if (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D))
 		{
 			player->moveRight(deltaTime);
 			hasMoved = true;
 		}
-		if (IsKeyDown(KEY_LEFT)) 
+		if (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A))
 		{
 			player->moveLeft(deltaTime);
 			hasMoved = true;
 		}
-		if (IsKeyPressed(KEY_SPACE)) 
+		if (IsKeyPressed(KEY_SPACE))
 		{
 			player->jump();
 			PlaySound(jumpSound);
 		}
 
-		if (!hasMoved) 
+		if (!hasMoved)
 		{
 			player->setState(AnimationState::IDLE);
 		}
 
 		EndDrawing();
+	}
+
+	for (Block* block : grassBlocks)
+	{
+		delete block;
+	}
+
+	for (Block* block : dirtBlocks) 
+	{
+		delete block;
 	}
 
 	delete player;
