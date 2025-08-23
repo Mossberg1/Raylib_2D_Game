@@ -1,17 +1,22 @@
 #include <iostream>
 #include <string>
 
+#include "config.h"
 #include "raylib.h"
 #include "Player.h"
 
 constexpr char* GAME_NAME = "MyGame";
-constexpr float GAME_MASTER_VOLUME = 0.3f;
+constexpr float MASTER_VOLUME = 0.3f;
+
 constexpr int WINDOW_WIDTH = 800;
 constexpr int WINDOW_HEIGHT = 600;
-constexpr bool SHOW_FPS = false;
+
+constexpr bool SHOW_FPS = true;
 constexpr bool USE_TARGET_FPS = false;
 constexpr int TARGET_FPS = 60;
+
 constexpr char* SOUNDTRACK = R"(C:\Users\willi\source\repos\Raylib_2D_Game\Game\resources\assets\music\time_for_adventure.mp3)";
+constexpr char* JUMP_SOUND = R"(C:\Users\willi\source\repos\Raylib_2D_Game\Game\resources\assets\sounds\jump.wav)";
 
 
 int main(void)
@@ -20,9 +25,11 @@ int main(void)
 	InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, GAME_NAME);
 
 	InitAudioDevice();
-	SetMasterVolume(GAME_MASTER_VOLUME);
+	SetMasterVolume(MASTER_VOLUME);
 
 	Music soundtrack = LoadMusicStream(SOUNDTRACK);
+	Sound jumpSound = LoadSound(JUMP_SOUND);
+
 	PlayMusicStream(soundtrack);
 
 
@@ -31,7 +38,7 @@ int main(void)
 		SetTargetFPS(TARGET_FPS);
 	}
 
-	Player* player = new Player({400, 400});
+	Player* player = new Player({400, GROUND_Y});
 
 	// Game loop
 	while (!WindowShouldClose()) 
@@ -61,6 +68,11 @@ int main(void)
 			player->moveLeft(deltaTime);
 			hasMoved = true;
 		}
+		if (IsKeyPressed(KEY_SPACE)) 
+		{
+			player->jump();
+			PlaySound(jumpSound);
+		}
 
 		if (!hasMoved) 
 		{
@@ -72,6 +84,7 @@ int main(void)
 
 	delete player;
 	UnloadMusicStream(soundtrack);
+	UnloadSound(jumpSound);
 	CloseAudioDevice();
 	CloseWindow();
 

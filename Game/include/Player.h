@@ -20,11 +20,13 @@ public:
     float speed;
     Vector2 velocity;
     Rectangle frameRec;
+    bool onGround = true;
 
     Player(Vector2 startPos);
     ~Player();
 
     void draw();
+    void jump();
     void moveRight(float deltaTime);
     void moveLeft(float deltaTime);
     void setState(AnimationState newState);
@@ -40,4 +42,7 @@ private:
     int m_animationSpeed = 8;
     AnimationState m_currentState;
     bool m_movingRight = true;
+
+    void addGravity();
+    void animate();
 };
