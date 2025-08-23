@@ -39,6 +39,7 @@ int main(void)
 	}
 
 	Player* player = new Player({400, GROUND_Y});
+	player->spawn();
 
 	// Game loop
 	while (!WindowShouldClose()) 

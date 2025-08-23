@@ -25,11 +25,13 @@ public:
     Player(Vector2 startPos);
     ~Player();
 
+    void despawn();
     void draw();
     void jump();
     void moveRight(float deltaTime);
     void moveLeft(float deltaTime);
     void setState(AnimationState newState);
+    void spawn();
 
 private:
     int m_framesPerCol = 8;
@@ -42,6 +44,7 @@ private:
     int m_animationSpeed = 8;
     AnimationState m_currentState;
     bool m_movingRight = true;
+    bool m_isSpawned = false;
 
     void addGravity();
     void animate();

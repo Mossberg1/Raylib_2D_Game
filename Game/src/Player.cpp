@@ -30,8 +30,19 @@ Player::~Player()
 }
 
 
+void Player::despawn() 
+{
+	m_isSpawned = false;
+}
+
+
 void Player::draw()
 {
+	if (!m_isSpawned) 
+	{
+		return;
+	}
+
 	addGravity();
 	animate();
 }
@@ -70,6 +81,12 @@ void Player::setState(AnimationState newState)
 		m_currentState = newState;
 		m_currentFrame = 0;
 	}
+}
+
+
+void Player::spawn() 
+{
+	m_isSpawned = true;
 }
 
 
